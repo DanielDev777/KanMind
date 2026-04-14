@@ -38,3 +38,11 @@ class UserSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True, write_only=True)
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    """Read-only serializer for user info in nested objects (members, assignees, etc.)"""
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'fullname']
+        read_only_fields = ['id', 'email', 'fullname']
