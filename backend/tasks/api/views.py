@@ -50,7 +50,7 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
         return [IsAuthenticated(), IsTaskBoardMember()]
     
 
-class CommentsView(generics.ListCreateAPIView):
+class CommentListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
@@ -79,6 +79,6 @@ class CommentsView(generics.ListCreateAPIView):
         serializer.save(task=task, author=self.request.user)
 
 
-class DeleteCommentView(generics.DestroyAPIView):
+class CommentDeleteView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated, IsCommentAuthor]
     queryset = Comment.objects.all()
