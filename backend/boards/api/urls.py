@@ -1,3 +1,4 @@
+"""URL routing for board API endpoints."""
 from django.urls import path
 from .views import BoardListCreateView, BoardDetailView
 

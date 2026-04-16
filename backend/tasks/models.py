@@ -1,10 +1,21 @@
+"""Task and Comment models for the kanban application.
+
+This module defines Task and Comment models which represent individual
+tasks on boards and comments on tasks.
+"""
 from django.db import models
 
 from auth_app.models import CustomUser
 from boards.models import Board
 
-# Create your models here.
+
 class Task(models.Model):
+    """Task model representing a work item on a board.
+
+    Tasks belong to a board and can be assigned to users, have
+    reviewers, status, priority, and due dates.
+    """
+
     STATUS_CHOICES = [
         ('to-do', 'To Do'),
         ('in-progress', 'In Progress'),
@@ -32,9 +43,17 @@ class Task(models.Model):
 
     @property
     def comments_count(self):
+        """Return the number of comments on this task."""
         return self.comments.count()
-    
+
+
 class Comment(models.Model):
+    """Comment model representing a discussion entry on a task.
+
+    Comments are created by users on specific tasks to provide
+    updates, feedback, or discussion points.
+    """
+
     task = models.ForeignKey(Task, related_name='comments', on_delete=models.CASCADE)
     author = models.ForeignKey(CustomUser, related_name='comments', on_delete=models.CASCADE)
     content = models.TextField()

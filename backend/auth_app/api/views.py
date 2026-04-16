@@ -1,3 +1,7 @@
+"""API views for user authentication.
+
+Provides endpoints for user registration, login, logout, and email checking.
+"""
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -9,9 +13,15 @@ from auth_app.models import CustomUser
 
 
 class RegisterView(APIView):
+    """Handle user registration.
+
+    Create a new user account and return an authentication token.
+    """
+
     permission_classes = [AllowAny]
 
     def post(self, request):
+        """Register a new user and return authentication token."""
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             try:
@@ -34,9 +44,15 @@ class RegisterView(APIView):
 
 
 class LoginView(APIView):
+    """Handle user login.
+
+    Authenticate user credentials and return an authentication token.
+    """
+
     permission_classes = [AllowAny]
 
     def post(self, request):
+        """Authenticate user and return token."""
         serializer = LoginSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -70,17 +86,29 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
+    """Handle user logout.
+
+    Delete the user's authentication token.
+    """
+
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        """Delete the user's authentication token."""
         request.user.auth_token.delete()
         return Response({"detail": "Logout erfolgreich. Token wurde gelöscht."}, status=status.HTTP_200_OK)
 
 
 class EmailCheckView(APIView):
+    """Check if an email exists in the database.
+
+    Used for validating user emails before board invitations.
+    """
+
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        """Check if email exists and return user data if found."""
         email = request.query_params.get('email')
         if not email:
             return Response({'error': 'Email is missing or has the wrong format.'}, status=status.HTTP_400_BAD_REQUEST)

@@ -1,0 +1,1 @@
+"""Boards application for kanban board management."""
