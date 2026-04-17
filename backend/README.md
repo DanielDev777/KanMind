@@ -46,12 +46,30 @@ A Django REST Framework API for a kanban board management system with user authe
    pip install -r requirements.txt
    ```
 
-4. **Apply database migrations**
+4. **Select Python interpreter (VS Code)**
+   - Press `Ctrl + Shift + P` and select "Python: Select Interpreter"
+   - Choose the Python interpreter from your virtual environment (`venv`)
+   - If not listed, select "Enter interpreter path" and navigate to `venv/Scripts/python.exe` (Windows) or `venv/bin/python` (macOS/Linux)
+
+5. **Configure environment variables**
+   - Duplicate the `.env.template` file and rename it to `.env`
+   - Generate a new Django secret key using one of these methods:
+     
+     **Option A: Using a web tool**
+     - Visit https://djecrety.ir/ and copy the generated key
+     
+     **Option B: Using the command line**
+     ```bash
+     python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+     ```
+   - Paste the generated key into the `SECRET_KEY` field in your `.env` file
+
+6. **Apply database migrations**
    ```bash
    python manage.py migrate
    ```
 
-5. **Create a superuser (optional, for admin access)**
+7. **Create a superuser (optional, for admin access)**
    ```bash
    python manage.py createsuperuser
    ```
