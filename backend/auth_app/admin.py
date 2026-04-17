@@ -11,7 +11,7 @@ class CustomUserAdmin(UserAdmin):
     Extends Django's UserAdmin to include the fullname field.
     """
 
-    list_display = ['email', 'fullname', 'is_staff', 'is_active', 'date_joined']
+    list_display = ['id', 'email', 'fullname', 'is_staff', 'is_active', 'date_joined']
     search_fields = ['email', 'fullname']
     list_filter = ['is_staff', 'is_active', 'date_joined']
     

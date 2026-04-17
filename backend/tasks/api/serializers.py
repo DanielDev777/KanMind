@@ -52,17 +52,24 @@ class TaskCreateUpdateSerializer(serializers.ModelSerializer):
                   'assignee_id', 'reviewer_id', 'due_date']
     
     def validate(self, data):
-        """Validate that assignee and reviewer are board members.
+        """Validate that creator, assignee, and reviewer are board members.
 
-        Raises ValidationError if assignee or reviewer is not a member
-        of the task's board.
+        Raises ValidationError if the current user, assignee, or reviewer
+        is not a member of the task's board.
         """
         board = data.get('board')
         assignee = data.get('assignee')
         reviewer = data.get('reviewer')
+        request = self.context.get('request')
+        current_user = request.user if request else None
         
         if board:
             board_members = list(board.members.all()) + [board.owner]
+            
+            if current_user and current_user not in board_members:
+                raise serializers.ValidationError({
+                    "board": "You must be a member of the board to create tasks."
+                })
             
             if assignee and assignee not in board_members:
                 raise serializers.ValidationError({
@@ -118,19 +125,12 @@ class CommentSerializer(serializers.ModelSerializer):
 class CommentCreateSerializer(serializers.ModelSerializer):
     """Serializer for comment creation.
 
-    Auto-assigns author from request user and task from context.
+    Author and task are provided by the view via perform_create.
     """
 
     class Meta:
         model = Comment
         fields = ['content']
-    
-    def create(self, validated_data):
-        """Create a new comment with auto-assigned author and task."""
-        request = self.context.get('request')
-        validated_data['author'] = request.user
-        validated_data['task'] = self.context.get('task')
-        return super().create(validated_data)
     
     def to_representation(self, instance):
         """Return comment in CommentSerializer format for consistent output."""

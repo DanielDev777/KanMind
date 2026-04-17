@@ -7,10 +7,10 @@ from .models import Task, Comment
 class TaskAdmin(admin.ModelAdmin):
     """Admin interface for Task model.
 
-    Displays task details including board, status, priority, and assignment.
+    Displays task details including id, board, status, priority, and assignment.
     """
 
-    list_display = ['title', 'board', 'status', 'priority', 'assignee', 'created_by']
+    list_display = ['id', 'title', 'board', 'status', 'priority', 'assignee', 'created_by']
     list_filter = ['status', 'priority', 'created_at']
     search_fields = ['title', 'description', 'board__title']
 
