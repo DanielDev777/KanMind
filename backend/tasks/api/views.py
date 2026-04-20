@@ -106,7 +106,6 @@ class CommentListCreateView(generics.ListCreateAPIView):
         task = get_object_or_404(Task, pk=self.kwargs['task_id'])
         board = task.board
         
-        # Check if user is board owner or member
         if board.owner != self.request.user and self.request.user not in board.members.all():
             raise PermissionDenied("You must be a member of the task's board to access comments.")
         
@@ -120,7 +119,6 @@ class CommentListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         """Create comment with auto-assigned task and author."""
         task = self.get_task_and_check_permission()
-        # Pass task in context so CommentCreateSerializer can auto-assign it
         serializer.save(task=task, author=self.request.user)
 
 

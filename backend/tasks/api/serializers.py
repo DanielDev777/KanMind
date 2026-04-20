@@ -7,6 +7,18 @@ from rest_framework import serializers
 from auth_app.api.serializers import UserDetailSerializer
 from auth_app.models import CustomUser
 from tasks.models import Task, Comment
+from rest_framework.exceptions import PermissionDenied, NotFound
+from boards.models import Board
+
+
+class BoardPrimaryKeyRelatedField(serializers.PrimaryKeyRelatedField):
+    """Custom field that raises 404 when board doesn't exist."""
+    
+    def to_internal_value(self, data):
+        try:
+            return super().to_internal_value(data)
+        except serializers.ValidationError:
+            raise NotFound("Board not found.")
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -33,6 +45,7 @@ class TaskCreateUpdateSerializer(serializers.ModelSerializer):
     auto-assigns created_by, and prevents board changes on update.
     """
 
+    board = BoardPrimaryKeyRelatedField(queryset=Board.objects.all())
     assignee_id = serializers.PrimaryKeyRelatedField(
         queryset=CustomUser.objects.all(),
         source='assignee',
@@ -67,9 +80,7 @@ class TaskCreateUpdateSerializer(serializers.ModelSerializer):
             board_members = list(board.members.all()) + [board.owner]
             
             if current_user and current_user not in board_members:
-                raise serializers.ValidationError({
-                    "board": "You must be a member of the board to create tasks."
-                })
+                raise PermissionDenied("You must be a member of the board to create tasks.")
             
             if assignee and assignee not in board_members:
                 raise serializers.ValidationError({
