@@ -34,6 +34,8 @@ if not SECRET_KEY:
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
     "kanmind.dev-kersten.de",
     "178.105.253.67"
 ]
