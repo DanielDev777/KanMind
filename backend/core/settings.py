@@ -33,11 +33,19 @@ if not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+ALLOWED_HOSTS = [
+    "kanmind.dev-kersten.de",
+    "178.105.253.67"
+]
+
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5500",
     "http://localhost:5500",
     "http://127.0.0.1:5501",
     "http://localhost:5501",
+    "http://178.105.253.67",
+    "http://kanmind.dev-kersten.de",
+    "https://kanmind.dev-kersten.de",
 ]
 
 APPEND_SLASH = True
@@ -137,6 +145,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Custom User Model
 AUTH_USER_MODEL = 'auth_app.CustomUser'
