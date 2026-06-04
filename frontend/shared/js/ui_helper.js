@@ -39,6 +39,9 @@ function setError(valid, id) {
 }
 
 function getInitials(fullname) {
+    if (!fullname) {
+        return 'GU';
+    }
     const parts = fullname.trim().split(" ");
     const initials = parts[0][0].toUpperCase() + parts[1][0].toUpperCase();
     return initials;
